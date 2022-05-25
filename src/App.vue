@@ -1,12 +1,26 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
+    <VueLayout>
+      <router-view />
+    </VueLayout>
   </div>
 </template>
+
+<script>
+import VueLayout from "./components/Layout/VueLayout.vue";
+
+export default {
+  name: "APP",
+  components: {
+    VueLayout,
+  },
+  data() {
+    return {
+      vueLayout: "PCLayout",
+    };
+  },
+};
+</script>
 
 <style lang="scss">
 #app {

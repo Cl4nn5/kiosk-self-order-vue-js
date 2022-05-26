@@ -29,6 +29,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
+  width: 1080px;
+  height: 1920px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: start;
 }
 
 nav {

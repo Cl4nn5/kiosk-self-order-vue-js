@@ -1,11 +1,18 @@
 <template>
-  <div class="sliderContainer">
+  <div class="sliderContainer" ref="container">
     <div class="slideWrap" :style="[styleSlideWidth, styleSlideHeight]">
       <div class="slider" :style="[styleSliderFullSize]" ref="slider">
         <ul>
-          <li v-for="(item, idx) in list" :key="idx" :style="styleSlideWidth">
-            <h2 :style="styleSlideHeight">{{ `${item.name}_${idx}` }}</h2>
-          </li>
+          <!-- <li v-for="(item, idx) in list" :key="idx" :style="styleSlideWidth">
+            <h2 :style="styleSlideHeight">{{ `${item.name}_${item.idx}` }}</h2>
+          </li> -->
+          <SliderItem
+            v-for="(item, idx) in list"
+            :slideWidth="styleSlideWidth"
+            :slideHeight="styleSlideHeight"
+            :key="idx"
+            :propsItem="item"
+          />
         </ul>
       </div>
       <div v-if="isPagination" class="pagination" :style="stylePagination">
@@ -17,12 +24,24 @@
 </template>
 
 <script>
+import SliderItem from "./SliderItem.vue";
+// slideWidth
+// slideHeight
 export default {
+  components: {
+    SliderItem,
+  },
+  props: {
+    slideWidth: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       list: [],
-      sliderWidth: 500,
       sliderHeight: 300,
+      sliderWidth: this.slideWidth,
       nowSliderIndex: 0,
       isPagination: true,
     };
@@ -37,9 +56,13 @@ export default {
         this.$refs.slider.style.left = `${this.nowSliderWidth * -1}px`;
       }
     },
-    "list.length"(val) {
-      console.log(val, "도달하니?");
-      this.nowSliderIndex = 0;
+    "list.length"(val, oldval) {
+      console.log(val, "그리고", oldval);
+      if (oldval > val) {
+        this.nowSliderIndex = val - 1;
+      } else {
+        this.nowSliderIndex = 0;
+      }
     },
   },
   computed: {
@@ -89,10 +112,15 @@ export default {
       };
     });
   },
+  mounted() {
+    if (!!this.sliderWidth === false) {
+      this.sliderWidth = this.$refs.container.clientWidth;
+    }
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 // $slideWidth: 500px;
 // $slideCount: 3;
 // $slideHeight: 300px;

@@ -1,14 +1,14 @@
 <template>
   <div class="sliderContainer">
-    <div class="slideWrap">
-      <div class="slider" ref="slider">
+    <div class="slideWrap" :style="[styleSlideWidth, styleSlideHeight]">
+      <div class="slider" :style="[styleSliderFullSize]" ref="slider">
         <ul>
-          <li v-for="(item, idx) in list" :key="idx">
-            <h2>{{ `${item.name}_${idx}` }}</h2>
+          <li v-for="(item, idx) in list" :key="idx" :style="styleSlideWidth">
+            <h2 :style="styleSlideHeight">{{ `${item.name}_${idx}` }}</h2>
           </li>
         </ul>
       </div>
-      <div class="pagination">
+      <div v-if="isPagination" class="pagination" :style="stylePagination">
         <span v-on:click="prevSlider">prev</span>
         <span v-on:click="nextSlider">next</span>
       </div>
@@ -22,7 +22,9 @@ export default {
     return {
       list: [],
       sliderWidth: 500,
+      sliderHeight: 300,
       nowSliderIndex: 0,
+      isPagination: true,
     };
   },
   watch: {
@@ -47,6 +49,29 @@ export default {
     nowSliderWidth() {
       return this.sliderWidth * this.nowSliderIndex;
     },
+    //#region style Computed
+    styleSlideWidth() {
+      return {
+        width: `${this.sliderWidth}px`,
+      };
+    },
+    styleSlideHeight() {
+      return {
+        height: `${this.sliderHeight}px`,
+      };
+    },
+    styleSliderFullSize() {
+      return {
+        width: `${this.sliderWidth * this.sliderSize}px`,
+      };
+    },
+    stylePagination() {
+      return {
+        width: `${this.sliderWidth / 2}px`,
+        left: `${this.sliderWidth / 4}px`,
+      };
+    },
+    //#endregion
   },
   methods: {
     prevSlider() {
@@ -68,13 +93,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$slideWidth: 500px;
-$slideCount: 3;
-$slideHeight: 300px;
+// $slideWidth: 500px;
+// $slideCount: 3;
+// $slideHeight: 300px;
 
 .slideWrap {
-  width: $slideWidth;
-  height: $slideHeight;
+  // width: $slideWidth;
+  // height: $slideHeight;
   position: relative;
   margin: 50px auto;
   background-color: aquamarine;
@@ -84,16 +109,16 @@ $slideHeight: 300px;
     position: absolute;
     left: 0;
     top: 0;
-    width: $slideWidth * $slideCount;
+    // width: $slideWidth * $slideCount;
     transition: left 0.5s ease-out;
 
     & > ul {
       display: flex;
       & > li {
-        width: $slideWidth;
+        // width: $slideWidth;
 
         & > h2 {
-          height: $slideHeight;
+          // height: $slideHeight;
           font-weight: 500;
           font-size: 24px;
           display: flex;
@@ -109,8 +134,8 @@ $slideHeight: 300px;
     display: flex;
     justify-content: space-evenly;
     align-items: flex-end;
-    width: $slideWidth / 2;
-    left: $slideWidth / 4;
+    // width: $slideWidth / 2;
+    // left: $slideWidth / 4;
 
     top: 90%;
     align-items: center;
